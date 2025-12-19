@@ -1,3 +1,4 @@
+mod machine;
 mod state;
 mod symbol;
 

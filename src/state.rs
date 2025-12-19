@@ -1,5 +1,8 @@
 use crate::symbol::Symbol;
-use std::{collections::HashMap, sync::Weak};
+use std::{
+    collections::HashMap,
+    sync::{Arc, Weak},
+};
 
 #[derive(Debug)]
 pub struct State {
@@ -9,12 +12,14 @@ pub struct State {
 }
 
 impl State {
-    pub fn new(name: impl Into<String>, finishing: bool) -> Self {
-        Self {
+    pub fn new(name: impl Into<String>, finishing: bool) -> Arc<Self> {
+        let state = Self {
             name: name.into(),
             transactions: HashMap::new(),
             finishing,
-        }
+        };
+
+        Arc::new(state)
     }
 
     pub fn add_transaction(&mut self, symbol: Symbol, state: Weak<State>) {
