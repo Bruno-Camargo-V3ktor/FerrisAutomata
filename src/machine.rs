@@ -1,5 +1,5 @@
 use crate::state::State;
-use std::sync::{Arc, Weak};
+use std::sync::{ Arc, Weak };
 
 pub struct Machine {
     pub states: Vec<Arc<State>>,
