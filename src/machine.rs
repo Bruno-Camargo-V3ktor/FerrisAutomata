@@ -1,19 +1,23 @@
-use crate::state::State;
+use crate::{ process::Process, state::State };
 use std::sync::{ Arc, Weak };
 
 pub struct Machine {
-    pub states: Vec<Arc<State>>,
-    pub input: Vec<char>,
     pub initial: Weak<State>,
 }
 
 impl Machine {
-    pub fn new(states: Vec<Arc<State>>, input: impl Into<String>, initial_pos: usize) -> Self {
-        let ref_state = Arc::downgrade(states.get(initial_pos).unwrap());
+    pub fn new(initial: &Arc<State>) -> Self {
         Self {
-            states,
-            initial: ref_state,
-            input: input.into().chars().into_iter().collect(),
+            initial: Arc::downgrade(initial),
         }
+    }
+
+    pub fn analyze(&self, input: impl Into<String>) -> bool {
+        let input: Arc<Vec<char>> = Arc::new(input.into().chars().into_iter().collect());
+
+        let mut process = Process::new(self.initial.clone(), input.clone(), 0);
+        process.start();
+
+        process.result
     }
 }
