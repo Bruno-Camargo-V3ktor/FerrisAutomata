@@ -5,13 +5,15 @@ use std::{collections::HashMap, sync::Weak};
 pub struct State {
     pub name: String,
     pub transactions: HashMap<Symbol, Vec<Weak<State>>>,
+    pub finishing: bool,
 }
 
 impl State {
-    pub fn new(name: impl Into<String>) -> Self {
+    pub fn new(name: impl Into<String>, finishing: bool) -> Self {
         Self {
             name: name.into(),
             transactions: HashMap::new(),
+            finishing,
         }
     }
 
