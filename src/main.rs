@@ -6,15 +6,28 @@ mod symbol;
 mod process;
 
 fn main() {
-    let input = "aaba";
-
+    let q0 = State::new("q0", false);
     let q1 = State::new("q1", false);
     let q2 = State::new("q2", false);
-    let q3 = State::new("q3", false);
-    let q4 = State::new("q4", true);
+    let q3 = State::new("q3", true);
 
-    q1.add_transaction(Symbol::Letter('a'), &q2);
+    q0.add_transaction(Symbol::Letter('a'), &q1);
+    q0.add_transaction(Symbol::Letter('b'), &q2);
 
-    let machine = Machine::new(&q1);
-    machine.analyze(input);
+    q1.add_transaction(Symbol::Letter('a'), &q3);
+    q1.add_transaction(Symbol::Letter('b'), &q2);
+
+    q2.add_transaction(Symbol::Letter('a'), &q1);
+    q2.add_transaction(Symbol::Letter('b'), &q3);
+
+    q3.add_transaction(Symbol::Letter('a'), &q3);
+    q3.add_transaction(Symbol::Letter('b'), &q3);
+
+    let machine = Machine::new(&q0);
+
+    let res = machine.analyze("aaba");
+    println!("{res}");
+
+    let res = machine.analyze("abab");
+    println!("{res}");
 }

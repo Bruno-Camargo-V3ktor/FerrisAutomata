@@ -15,16 +15,16 @@ impl Process {
     }
 
     pub fn start(&mut self) {
-        let state = self.actual_state.upgrade().unwrap();
-
         loop {
+            let state = self.actual_state.upgrade().unwrap();
+
             if let Some(states) = state.clone().get_transaction().get(&Symbol::Empty) {
                 for state in states {
                     self.create_subprocess(state.clone(), self.pos);
                 }
             }
 
-            if self.input.len() < self.pos {
+            if self.input.len() > self.pos {
                 let actual_letter = Symbol::Letter(self.input[self.pos]);
 
                 if let Some(states) = state.clone().get_transaction().get(&actual_letter) {
