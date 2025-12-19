@@ -2,11 +2,11 @@ use std::{ sync::{ Arc, Weak }, thread::{ self, JoinHandle } };
 use crate::{ state::State, symbol::Symbol };
 
 pub struct Process {
-    actual_state: Weak<State>,
-    result: bool,
-    sub_process: Vec<JoinHandle<Process>>,
-    input: Arc<Vec<char>>,
-    pos: usize,
+    pub actual_state: Weak<State>,
+    pub result: bool,
+    pub sub_process: Vec<JoinHandle<Process>>,
+    pub input: Arc<Vec<char>>,
+    pub pos: usize,
 }
 
 impl Process {
@@ -18,7 +18,7 @@ impl Process {
         let state = self.actual_state.upgrade().unwrap();
 
         loop {
-            if let Some(states) = state.clone().transactions.get(&Symbol::Empty) {
+            if let Some(states) = state.clone().get_transaction().get(&Symbol::Empty) {
                 for state in states {
                     self.create_subprocess(state.clone(), self.pos);
                 }
@@ -27,7 +27,7 @@ impl Process {
             if self.input.len() < self.pos {
                 let actual_letter = Symbol::Letter(self.input[self.pos]);
 
-                if let Some(states) = state.clone().transactions.get(&actual_letter) {
+                if let Some(states) = state.clone().get_transaction().get(&actual_letter) {
                     if let Some(state) = states.first() {
                         self.actual_state = state.clone();
                     } else {
