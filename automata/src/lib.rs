@@ -1,13 +1,11 @@
-mod machine;
-mod state;
-mod symbol;
-mod process;
-
-fn main() {}
+pub mod machine;
+pub mod process;
+pub mod state;
+pub mod symbol;
 
 #[cfg(test)]
 mod tests {
-    use crate::{ machine::Machine, state::State, symbol::Symbol };
+    use crate::{machine::Machine, state::State, symbol::Symbol};
 
     #[test]
     fn test_afd_01() {
