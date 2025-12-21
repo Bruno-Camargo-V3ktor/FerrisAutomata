@@ -1,2 +1,3 @@
 [workspace]
-members = ["automata"]
+resolver = "3"
+members = ["automata", "cli"]
