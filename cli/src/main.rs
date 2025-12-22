@@ -1,8 +1,8 @@
 use automata::state::State;
 use automata::symbol::Symbol;
 use colorz::Colorize;
-use std::collections::HashMap;
 use std::io::{Read, Result as IOResult};
+use std::sync::Arc;
 use std::{env::args, fs::File, process::ExitCode};
 
 fn main() -> ExitCode {
@@ -54,7 +54,25 @@ fn main() -> ExitCode {
         .collect();
     symbols.push(Symbol::Empty);
 
-    let mut states: HashMap<String, State> = HashMap::with_capacity(lines.len());
+    let mut states: Vec<Arc<State>> = Vec::with_capacity(lines.len());
+    for col in 0..=lines[0].len() {
+        for line in 1..lines.len() {
+            if col == 0 {
+                let mut name = lines[line][col].clone();
+                let finishing = if name.starts_with(':') {
+                    name = name.strip_prefix(":").unwrap().to_string();
+                    true
+                } else {
+                    false
+                };
+
+                let state = State::new(name, finishing);
+                states.push(state);
+            }
+        }
+    }
+
+    println!("{:?}", states);
 
     ExitCode::SUCCESS
 }
