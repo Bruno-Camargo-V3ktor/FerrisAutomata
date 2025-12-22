@@ -1,3 +1,4 @@
+use automata::symbol::Symbol;
 use colorz::Colorize;
 use std::io::{Read, Result as IOResult};
 use std::{env::args, fs::File, process::ExitCode};
@@ -11,13 +12,30 @@ fn main() -> ExitCode {
         return ExitCode::FAILURE;
     }
 
-    let lines = match open_file(&args[0]) {
+    let lines: Vec<Vec<String>> = match open_file(&args[0]) {
         Ok(lines) => lines,
         Err(err) => {
             eprintln!("{} {:?}", "File Invalid...\n Error:".red(), err);
             return ExitCode::FAILURE;
         }
-    };
+    }
+    .into_iter()
+    .map(|str| {
+        str.split(";")
+            .map(|s| s.to_string())
+            .collect::<Vec<String>>()
+    })
+    .collect();
+
+    let mut symbols: Vec<Symbol> = lines[0]
+        .iter()
+        .skip(1)
+        .map(|s| {
+            let letter = s.parse::<char>().expect(&format!("Invalid Symbol: {}", s));
+            Symbol::Letter(letter)
+        })
+        .collect();
+    symbols.push(Symbol::Empty);
 
     ExitCode::SUCCESS
 }
