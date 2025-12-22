@@ -1,3 +1,4 @@
+use automata::machine::Machine;
 use automata::state::State;
 use automata::symbol::Symbol;
 use colorz::Colorize;
@@ -82,6 +83,18 @@ fn main() -> ExitCode {
                 }
             }
         }
+    }
+
+    let machine = Machine::new(&states[0]);
+    for word in &args[1..] {
+        let result = machine.analyze(word);
+        let message = if result {
+            format!("{} {}", "Approved:".green().bold(), word.italics())
+        } else {
+            format!("{} {}", "Rejected:".red().bold(), word.italics())
+        };
+
+        println!("{message}");
     }
 
     ExitCode::SUCCESS
