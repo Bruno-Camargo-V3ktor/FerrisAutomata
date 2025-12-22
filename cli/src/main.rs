@@ -1,5 +1,7 @@
+use automata::state::State;
 use automata::symbol::Symbol;
 use colorz::Colorize;
+use std::collections::HashMap;
 use std::io::{Read, Result as IOResult};
 use std::{env::args, fs::File, process::ExitCode};
 
@@ -15,7 +17,11 @@ fn main() -> ExitCode {
     let lines: Vec<Vec<String>> = match open_file(&args[0]) {
         Ok(lines) => lines,
         Err(err) => {
-            eprintln!("{} {:?}", "File Invalid...\n Error:".red(), err);
+            eprintln!(
+                "{} {:?}",
+                "File Invalid...\nError:".red(),
+                err.kind().yellow()
+            );
             return ExitCode::FAILURE;
         }
     }
@@ -27,15 +33,28 @@ fn main() -> ExitCode {
     })
     .collect();
 
+    if lines.len() < 2 {
+        eprintln!("{}", "Format from file invalid".red());
+        return ExitCode::FAILURE;
+    }
+
     let mut symbols: Vec<Symbol> = lines[0]
         .iter()
         .skip(1)
         .map(|s| {
-            let letter = s.parse::<char>().expect(&format!("Invalid Symbol: {}", s));
+            let letter = match s.parse::<char>() {
+                Ok(c) => c,
+                Err(_) => {
+                    panic!("{} {}", "Invalid Symbol:".red(), s.yellow());
+                }
+            };
+
             Symbol::Letter(letter)
         })
         .collect();
     symbols.push(Symbol::Empty);
+
+    let mut states: HashMap<String, State> = HashMap::with_capacity(lines.len());
 
     ExitCode::SUCCESS
 }
