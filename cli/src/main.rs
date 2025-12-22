@@ -57,6 +57,10 @@ fn main() -> ExitCode {
     let mut states: Vec<Arc<State>> = Vec::with_capacity(lines.len());
     for col in 0..=lines[0].len() {
         for line in 1..lines.len() {
+            if col == lines[0].len() && lines[1].len() <= col {
+                break;
+            }
+
             if col == 0 {
                 let mut name = lines[line][col].clone();
                 let finishing = if name.starts_with(':') {
@@ -68,11 +72,17 @@ fn main() -> ExitCode {
 
                 let state = State::new(name, finishing);
                 states.push(state);
+                continue;
+            }
+
+            let names = lines[line][col].clone();
+            for name in names.split(",") {
+                if let Some(state) = states.iter().find(|state| state.name == name) {
+                    states[line - 1].add_transaction(symbols[col - 1].clone(), state);
+                }
             }
         }
     }
-
-    println!("{:?}", states);
 
     ExitCode::SUCCESS
 }

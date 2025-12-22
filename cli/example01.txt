@@ -1,5 +1,5 @@
 -;a;b
-q0;q1;q2
-q1;qf;q2
-q2;q1;qf
-:qf;qf;qf
+q0;q1;q2;
+q1;qf;q2;
+q2;q1;qf;
+:qf;qf;qf;
