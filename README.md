@@ -114,6 +114,9 @@ q6;q6;q6;q6,q7;-
 
 ⚠️ Limitações Conhecidas e Melhorias Futuras
 
-    Loops Infinitos com Movimentos Vazios (ϵ-loops): Atualmente, o sistema não possui uma detecção automática de ciclos fechados compostos exclusivamente por transições vazias. Caso a tabela de transição contenha um ciclo onde um estado retorna a si mesmo sem consumir nenhuma entrada (ex: A -> B -> A apenas com movimentos vazios), o programa entrará em loop infinito. Isso fará com que a execução nunca termine, possivelmente resultando em um travamento (crash) por estouro de pilha (stack overflow) ou consumo excessivo de memória.
+    Loops Infinitos com Movimentos Vazios (ϵ-loops): Atualmente, o sistema não possui uma detecção automática de ciclos fechado
+    compostos exclusivamente por transições vazias. Caso a tabela de transição contenha um ciclo onde um estado retorna a si mesmo sem
+    consumir nenhuma entrada (ex: A -> B -> A apenas com movimentos vazios), o programa entrará em loop infinito. Isso fará com que a
+    execução nunca termine, possivelmente resultando em um travamento (crash) por estouro de pilha (stack overflow) ou consumo excessivo de memória.
 
 ---
