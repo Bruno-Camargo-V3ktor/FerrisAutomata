@@ -85,6 +85,8 @@ fn main() -> ExitCode {
         }
     }
 
+    //print_states(&states);
+
     let machine = Machine::new(&states[0]);
     for word in &args[1..] {
         let result = machine.analyze(word);
@@ -108,4 +110,17 @@ pub fn open_file(path: impl Into<String>) -> IOResult<Vec<String>> {
     let lines = buffer.lines();
 
     Ok(lines.into_iter().map(|str| str.to_string()).collect())
+}
+
+pub fn print_states(states: &[Arc<State>]) {
+    for state in states {
+        println!("{}:", state.name);
+        for (key, item) in &(*state.get_transaction()) {
+            println!("\t{key:?}:");
+            for s in item {
+                let s = s.upgrade().unwrap();
+                println!("\t\t{}", s.name);
+            }
+        }
+    }
 }

@@ -1,5 +1,8 @@
-use std::{ sync::{ Arc, Weak }, thread::{ self, JoinHandle } };
-use crate::{ state::State, symbol::Symbol };
+use crate::{state::State, symbol::Symbol};
+use std::{
+    sync::{Arc, Weak},
+    thread::{self, JoinHandle},
+};
 
 pub struct Process {
     pub actual_state: Weak<State>,
@@ -11,7 +14,13 @@ pub struct Process {
 
 impl Process {
     pub fn new(actual_state: Weak<State>, input: Arc<Vec<char>>, pos: usize) -> Self {
-        Process { actual_state, result: false, sub_process: vec![], input, pos }
+        Process {
+            actual_state,
+            result: false,
+            sub_process: vec![],
+            input,
+            pos,
+        }
     }
 
     pub fn start(&mut self) {
